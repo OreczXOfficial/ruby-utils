@@ -24,7 +24,7 @@
     fps = times.length;
   };
 
-  class RubyUtils {
+  class MubilopRubyUtils {
     ipCache = {};
     embedProperties = {};
 
@@ -66,6 +66,17 @@
               SEARCH: {
                 type: Scratch.ArgumentType.STRING,
                 defaultValue: 'cats'
+              }
+            }
+          },
+          {
+            opcode: 'getFromGoogle',
+            text: 'Search [SEARCH] in google',
+            blockType: Scratch.BlockType.REPORTER,
+            arguments: {
+              SEARCH: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'cat races'
               }
             }
           },
@@ -215,6 +226,20 @@
     getFromGoogleImages(args) {
       const searchQuery = args.SEARCH; // Search argument provided in the block
       const apiUrl = `https://corsproxy.io/?https://mubilop-api.vercel.app/api/getImageLink?query=${searchQuery}`;
+      
+      return fetch(apiUrl)
+        .then((response) => {
+          return response.text();
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          return 'Error fetching data.';
+        });
+    }
+
+    getFromGoogle(args) {
+      const searchQuery = args.SEARCH; // Search argument provided in the block
+      const apiUrl = `https://corsproxy.io/?https://mubilop-api.vercel.app/api/searchGoogle?query=${searchQuery}`;
       
       return fetch(apiUrl)
         .then((response) => {
@@ -376,5 +401,5 @@
     }
   }
 
-  Scratch.extensions.register(new RubyUtils());
+  Scratch.extensions.register(new MubilopRubyUtils());
 })(Scratch);
